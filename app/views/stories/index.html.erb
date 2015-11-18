@@ -1,0 +1,67 @@
+<!-- Mobile side nav -->
+<div class="sidebar">
+  <div class="side-nav">
+    <img src="https://s3.amazonaws.com/WorkHang/OCSlogo" alt="Omaha Code School star" height="50" width="50">
+    <div class="class-links">
+      <div class="post-links">
+        <h5>Posts</h5>
+        <ul>
+          <li><a href="<%= stories_path %>">Stories</a></li>
+          <li><a href="<%= questions_path %>">Interview Questions</a></li>
+          <li><a href="<%= storyrequests_path %>">See Current Story Requests</a></li>
+          <li><a href="<%= new_storyrequest_path %>">Request a New Story</a></li>
+        </ul>
+      </div>
+
+      <div class="cohort-links">
+        <h5>Cohorts</h5>
+        <ul>
+          <% Cohort.all.each do |cohort| %>
+          <li><a href="<%= cohort_path(cohort.name ) %>"><%= cohort.name %></a></li>
+          <% end %>
+        </ul>
+    </div>
+    </div>
+  </div>
+</div>
+
+    <div class="show_info">
+      <h3>Stories</h3>
+      <% @posts.all.each do |post| %>
+      <% if post.subject_type == "Story" %>
+      <h4>
+    
+        <div class = "thumbnail">
+          <a href  = "<%= user_path(post.subject.user.id) %>">
+            <%= image_tag post.subject.user.profile_photo.url if post.subject.user.profile_photo? %>
+            <%= image_tag "/avatar.png" if !post.subject.user.profile_photo? %>
+        
+            <small><a href="<%= user_path(post.subject.user.id) %>"><%= post.subject.user.first_name%>
+            </a></small>
+            <%= post.subject.title %>
+            <% if current_user == post.subject.user %>
+            <small>
+              <% link_to edit_story_path(post.subject.id) %>
+              <a href="#" class="edit_form_click" data-id="<%= post.subject.id %>">
+                <i class="fa fa-pencil"></i></a>
+          
+                <div id="edit_form_<%= post.subject.id %>" style="display:none;">
+                  <%= render partial: "stories/edit", locals: {post: post.subject} %>
+                </div>
+          
+                <a href="<%= question_path(post.subject.id) %>" data-method="delete">
+                  <i class="fa fa-trash-o"></i>
+                </a>
+              </small>
+              <small>(<%= time_ago_in_words(post.subject.created_at) %> ago)</small>
+            </h4>
+      
+            <% end %>
+            <p><%= post.subject.content %></p>
+            <p><%= post.subject.link %></p>
+            <a href="<%= story_path(post.subject.id) %>"><i class="fa fa-commenting-o"></i></a>
+            <% end %>
+            <% end %>
+          </div>
+        </div>
+   
